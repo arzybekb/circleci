@@ -1,0 +1,13 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "717511676928.dkr.ecr.eu-central-1.amazonaws.com/circleci-test:1.0",
+    "Update": "true"
+  },
+  "Ports": [
+    {
+      "ContainerPort": 80,
+      "HostPort": 8000
+    }
+  ]
+}
