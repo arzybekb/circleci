@@ -66,4 +66,4 @@ how to check it?
 
 10. Create an Account in AWS using this link https://aws.amazon.com and Sign in
 11. After Create an account go to amazon console
-12. And Go to Se
+12. And Go to Se 
