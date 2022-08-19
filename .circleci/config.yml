@@ -42,3 +42,5 @@ workflows:
       - deploy-to-eb:
           context:
             - CIRCLECI-TEST
+          requires:
+            - aws-ecr/build-and-push-image
