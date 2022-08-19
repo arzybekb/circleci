@@ -8,7 +8,18 @@ orbs:
 
 commands:
   build-image: aws-ecr/build-image
-
+jobs:
+  deploy-to-eb:
+    docker:
+      - image: "cimg/base:stable"
+    steps:
+      - checkout
+      - eb/setup
+      - run:
+          command: |
+            sed -i -e "s;%BUILD_NUM%;$CIRCLE_SHA1;g" ./deploy/Dockerrun.aws.json
+            cd ./deploy && eb init $AWS_APPLICATION_NAME -r $AWS_DEFAULT_REGION -p docker
+            eb deploy -l $CIRCLE_SHA1
 workflows:
   build:
     jobs:
@@ -31,14 +42,3 @@ workflows:
       - deploy-to-eb:
           context:
             - CIRCLECI-TEST
-          docker:
-            - image: "cimg/base:stable"
-          steps:
-            - checkout
-            - eb/setup
-            - run:
-                command: |
-                  sed -i -e "s;%BUILD_NUM%;$CIRCLE_SHA1;g" ./deploy/Dockerrun.aws.json
-                  cd ./deploy && eb init $AWS_APPLICATION_NAME -r $AWS_DEFAULT_REGION -p docker
-                  eb deploy -l $CIRCLE_SHA1
-          
