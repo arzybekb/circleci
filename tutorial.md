@@ -46,9 +46,24 @@ COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 CMD [ "nginx", "-g", "daemon off;" ]
 ```
-8. Build Docker Image
-go to the terminal
-and execute this commands
+8. Create file `docker-compose.yml` and write this code below into `docker-compose.yml`
 ```
-docker build -t <dockerhub_username>/<any_image_name>:<any_tag>
+version: '3.9'
+services:
+  app:
+    container_name: circleci
+    build: ./
+    restart: always
+    ports:
+      - "8000:80"
 ```
+9. After that check is your docker image works?
+how to check it?
+- go to the terminal where inside have docker-compose.yml
+- and execute comman `docker-compose up --build`
+- after that go to http://localhost:8000
+- if this url works then all is fine
+
+10. Create an Account in AWS using this link https://aws.amazon.com and Sign in
+11. After Create an account go to amazon console
+12. And Go to Se
