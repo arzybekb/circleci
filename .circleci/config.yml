@@ -17,7 +17,7 @@ jobs:
       - checkout
       - build-image:
         account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
-          path: ./
+          path: .
           region: AWS_DEFAULT_REGION
           repo: circleci-test
           tag: $CIRCLE_SHA1
