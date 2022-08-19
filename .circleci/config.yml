@@ -2,25 +2,44 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+orbs:
+  aws-ecr: circleci/aws-ecr@7.0.0
+  eb: circleci/aws-elastic-beanstalk@2.0.1
+
+commands:
+  build-image: aws-ecr/build-image
+
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
-    docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+  build-image:
+    executor:
+      name: aws-ecr/default
     steps:
       - checkout
-      - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+      - build-image:
+        account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
+          path: ./
+          region: AWS_DEFAULT_REGION
+          repo: circleci-test
+          tag: $CIRCLE_SHA1
 workflows:
-  say-hello-workflow:
+  build:
     jobs:
-      - say-hello
+      - build-image:
+          context:
+            - CIRCLECI-TEST
+      - aws-ecr/build-and-push-image:
+          context:
+            - CIRCLECI-TEST
+          account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
+          create-repo: false
+          dockerfile: Dockerfile
+          no-output-timeout: 20m
+          path: ./
+          region: AWS_DEFAULT_REGION
+          repo: circleci-test
+          skip-when-tags-exist: false
+          tag: $CIRCLE_SHA1
+          # filters:
+          #   branches:
+          #     only:
+          #       - dev
