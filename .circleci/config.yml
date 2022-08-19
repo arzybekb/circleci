@@ -9,24 +9,9 @@ orbs:
 commands:
   build-image: aws-ecr/build-image
 
-jobs:
-  build-image:
-    executor:
-      name: aws-ecr/default
-    steps:
-      - checkout
-      - build-image:
-          account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
-          path: .
-          region: AWS_DEFAULT_REGION
-          repo: circleci-test
-          tag: $CIRCLE_SHA1
 workflows:
   build:
     jobs:
-      - build-image:
-          context:
-            - CIRCLECI-TEST
       - aws-ecr/build-and-push-image:
           context:
             - CIRCLECI-TEST
