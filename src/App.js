@@ -27,6 +27,14 @@ function App() {
         >
           Arzybek
         </a>
+            <a
+          className="App-link"
+          href="https://github.com/Nurbek-Abdirasulov"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Nurbek
+        </a>
       </header>
     </div>
   );
